@@ -25,8 +25,10 @@ oauth = OAuth(app)
 
 os.environ.setdefault('AUTHLIB_INSECURE_TRANSPORT', '1')  # use http
 
-CLIENT_ID = 'OIvBAyoRMzhiMCB0rOZ2FU52'
-CLIENT_SECRET = '5QjOjVigR66ZOzGoX0GzFx5hqAvVCtYCobARozdtOBfQtwB6'
+CLIENT_ID = 'YOUR-CLIENT-ID'
+CLIENT_SECRET = 'YOUR-CLIENT-SECRET'
+
+REDIRECT_URI = 'http://127.0.0.1:3000/callback'
 
 auth0 = oauth.register(
     'woko_test',
@@ -56,16 +58,13 @@ def callback_handling():
     session['profile'] = {
         'user_id': userinfo['id'],
         'name': userinfo['username'],
-        'picture': ''
     }
     return redirect('/dashboard')
 
 
 @app.route('/login')
 def login():
-    return auth0.authorize_redirect(
-        redirect_uri='http://localhost:3000/callback',
-        audience='http://127.0.0.1:5000/api/me')
+    return auth0.authorize_redirect(redirect_uri=REDIRECT_URI)
 
 
 def requires_auth(f):
@@ -109,4 +108,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=3000)
+    app.run(host='127.0.0.1', port=3000)
